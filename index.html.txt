@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chinese Vocab Flashcards | AI-Generated Learning Cards</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <!-- Chart.js (for payment status visualization) -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+    <!-- Custom Tailwind Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#2563EB', // Blue (trust/professional)
+                        secondary: '#4B5563',
+                        success: '#10B981',
+                        danger: '#EF4444',
+                        accent: '#F59E0B', // Amber (attention for payment)
+                        light: '#F9FAFB',
+                        dark: '#1F2937'
+                    },
+                    fontFamily: {
+                        inter: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .card-shadow {
+                box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.03);
+            }
+            .transition-custom {
+                transition: all 0.3s ease-in-out;
+            }
+            .qr-animation {
+                animation: pulse 2s infinite;
+            }
+            @keyframes pulse {
+                0%, 100% { opacity: 1; }
+                50% { opacity: 0.9; }
+            }
+        }
+    </style>
+</head>
+<body class="font-inter bg-gray-50 min-h-screen text-dark">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-md fixed w-full z-10 top-0">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <a href="#" class="flex items-center space-x-2">
+                        <i class="fa fa-book text-primary text-2xl"></i>
+                        <span class="text-xl font-bold">Chinese Vocab Master</span>
+                    </a>
+                </div>
+                <div class="flex items-center space-x-6">
+                    <a href="#features" class="text-secondary hover:text-primary transition-custom hidden md:block">Features</a>
+                    <a href="#pricing" class="text-secondary hover:text-primary transition-custom hidden md:block">Pricing</a>
+                    <button id="loginBtn" class="text-primary hover:text-primary/80 transition-custom px-3 py-2 rounded-md text-sm font-medium">
+                        <i class="fa fa-sign-in mr-1"></i> Login
+                    </button>
+                    <button id="logoutBtn" class="text-danger hover:text-danger/80 transition-custom px-3 py-2 rounded-md text-sm font-medium hidden">
+                        <i class="fa fa-sign-out mr-1"></i> Logout
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="pt-28 pb-16 bg-gradient-to-b from-white to-gray-50">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="max-w-4xl mx-auto text-center">
+                <h1 class="text-[clamp(2rem,5vw,3.5rem)] font-bold text-dark leading-tight">
+                    AI-Generated Chinese Vocabulary Flashcards
+                </h1>
+                <p class="mt-4 text-xl text-secondary max-w-2xl mx-auto">
+                    Master Chinese words with our AI-curated flashcards - Access exclusive Quizlet sets after payment
+                </p>
+                <div class="mt-8 flex flex-col sm:flex-row justify-center gap-4">
+                    <button id="getStartedBtn" class="bg-primary hover:bg-primary/90 text-white font-medium py-3 px-8 rounded-lg transition-custom">
+                        Get Started <i class="fa fa-arrow-right ml-2"></i>
+                    </button>
+                    <a href="#features" class="bg-white hover:bg-gray-100 text-dark border border-gray-200 font-medium py-3 px-8 rounded-lg transition-custom">
+                        Learn More
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-16 bg-white">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold">Why Choose Our Flashcards?</h2>
+                <p class="mt-4 text-secondary max-w-2xl mx-auto">AI-generated, expert-verified Chinese vocabulary cards optimized for effective learning</p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-light rounded-xl p-6 card-shadow hover:shadow-lg transition-custom">
+                    <div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mb-4">
+                        <i class="fa fa-robot text-primary text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">AI-Curated Content</h3>
+                    <p class="text-secondary">Our AI analyzes common Chinese words and creates optimized flashcards for maximum retention</p>
+                </div>
+                
+                <div class="bg-light rounded-xl p-6 card-shadow hover:shadow-lg transition-custom">
+                    <div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mb-4">
+                        <i class="fa fa-quizlet text-primary text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Quizlet Integration</h3>
+                    <p class="text-secondary">Access all flashcards directly on Quizlet - study on any device with Quizlet's powerful tools</p>
+                </div>
+                
+                <div class="bg-light rounded-xl p-6 card-shadow hover:shadow-lg transition-custom">
+                    <div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mb-4">
+                        <i class="fa fa-language text-primary text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Comprehensive Coverage</h3>
+                    <p class="text-secondary">Covers HSK levels 1-6, business Chinese, and daily conversation vocabulary</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold">Simple Pricing</h2>
+                <p class="mt-4 text-secondary max-w-2xl mx-auto">One-time payment for lifetime access to all our Chinese vocabulary flashcard sets</p>
+            </div>
+            
+            <div class="max-w-2xl mx-auto">
+                <div class="bg-white rounded-2xl card-shadow overflow-hidden">
+                    <div class="p-8">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="text-2xl font-bold">Full Access Package</h3>
+                            <span class="bg-accent/10 text-accent px-3 py-1 rounded-full text-sm font-medium">Best Value</span>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <span class="text-4xl font-bold">$19.99</span>
+                            <span class="text-secondary ml-2">One-time payment</span>
+                        </div>
+                        
+                        <ul class="space-y-3 mb-8">
+                            <li class="flex items-start">
+                                <i class="fa fa-check text-success mt-1 mr-3"></i>
+                                <span>Access to all AI-generated Chinese flashcard sets</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fa fa-check text-success mt-1 mr-3"></i>
+                                <span>Quizlet set invitations (unlimited lifetime access)</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fa fa-check text-success mt-1 mr-3"></i>
+                                <span>Regular updates to flashcard content</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fa fa-check text-success mt-1 mr-3"></i>
+                                <span>Mobile-friendly study experience</span>
+                            </li>
+                        </ul>
+                        
+                        <button id="purchaseBtn" class="w-full bg-accent hover:bg-accent/90 text-white font-medium py-3 px-6 rounded-lg transition-custom">
+                            Purchase Now <i class="fa fa-credit-card ml-2"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-xl card-shadow w-full max-w-md p-6 sm:p-8 transform transition-custom scale-95 opacity-0" id="modalContent">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold">Login to Your Account</h2>
+                <button id="closeModalBtn" class="text-secondary hover:text-dark transition-custom">
+                    <i class="fa fa-times text-xl"></i>
+                </button>
+            </div>
+            
+            <form id="loginForm" class="space-y-5">
+                <div class="space-y-2">
+                    <label for="email" class="block text-sm font-medium text-gray-700">
+                        <i class="fa fa-envelope-o mr-2 text-primary"></i>Email Address
+                    </label>
+                    <input type="email" id="email" name="email" 
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none transition-custom"
+                           placeholder="your@email.com" required>
+                    <p id="emailError" class="text-danger text-xs hidden">Please enter a valid email address</p>
+                </div>
+                
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <input id="remember" type="checkbox" class="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded">
+                        <label for="remember" class="ml-2 block text-sm text-gray-700">Remember me</label>
+                    </div>
+                </div>
+                
+                <button type="submit" class="w-full bg-primary hover:bg-primary/90 text-white font-medium py-3 px-6 rounded-lg transition-custom">
+                    Login <i class="fa fa-sign-in ml-2"></i>
+                </button>
+            </form>
+            
+            <div class="mt-6 text-center">
+                <p class="text-sm text-secondary">
+                    Don't have an account? <span class="text-primary font-medium cursor-pointer hover:underline" id="createAccountBtn">Create one</span>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Payment Page (Hidden by Default) -->
+    <div id="paymentPage" class="fixed inset-0 bg-white z-40 hidden">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-20">
+            <div class="max-w-3xl mx-auto">
+                <div class="flex justify-between items-center mb-8">
+                    <h2 class="text-2xl font-bold">Complete Your Payment</h2>
+                    <button id="closePaymentBtn" class="text-secondary hover:text-dark transition-custom">
+                        <i class="fa fa-times text-xl"></i>
+                    </button>
+                </div>
+                
+                <div class="grid md:grid-cols-2 gap-8">
+                    <!-- Payment Details -->
+                    <div>
+                        <div class="bg-light rounded-xl p-6 card-shadow">
+                            <h3 class="text-xl font-semibold mb-4">Order Summary</h3>
+                            
+                            <div class="space-y-4 border-b border-gray-200 pb-4 mb-4">
+                                <div class="flex justify-between">
+                                    <span class="text-secondary">Chinese Vocab Flashcards</span>
+                                    <span class="font-medium">$19.99</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-secondary">Payment Method</span>
+                                    <span class="font-medium">QR Code Payment</span>
+                                </div>
+                            </div>
+                            
+                            <div class="flex justify-between mb-6">
+                                <span class="font-semibold">Total</span>
+                                <span class="text-xl font-bold">$19.99</span>
+                            </div>
+                            
+                            <div id="paymentStatus" class="mb-6 hidden">
+                                <div class="flex items-center p-3 bg-success/10 rounded-lg text-success">
+                                    <i class="fa fa-check-circle mr-2"></i>
+                                    <span>Payment confirmed! Processing Quizlet invitation...</span>
+                                </div>
+                            </div>
+                            
+                            <div id="invitationStatus" class="mb-6 hidden">
+                                <div class="flex items-center p-3 bg-success/10 rounded-lg text-success">
+                                    <i class="fa fa-check-circle mr-2"></i>
+                                    <span>Success! You've been invited to Quizlet sets (check your email)</span>
+                                </div>
+                            </div>
+                            
+                            <div class="space-y-3">
+                                <p class="text-sm text-secondary"><i class="fa fa-info-circle mr-2 text-primary"></i> After payment, please wait for confirmation (1-2 minutes)</p>
+                                <p class="text-sm text-secondary"><i class="fa fa-info-circle mr-2 text-primary"></i> We'll send Quizlet invitation to: <span id="userEmailDisplay" class="font-medium">your@email.com</span></p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- QR Code Payment -->
+                    <div>
+                        <div class="bg-light rounded-xl p-6 card-shadow flex flex-col items-center">
+                            <h3 class="text-xl font-semibold mb-4 text-center">Scan to Pay</h3>
+                            <p class="text-secondary text-sm mb-6 text-center">Scan the QR code with your mobile payment app</p>
+                            
+                            <!-- QR Code Container -->
+                            <div class="w-64 h-64 bg-white p-4 border border-gray-200 rounded-lg card-shadow flex items-center justify-center mb-6 qr-animation">
+                                <img src="https://picsum.photos/200/200" alt="Payment QR Code" class="w-full h-full object-contain" id="paymentQrCode">
+                            </div>
+                            
+                            <div class="text-center space-y-2">
+                                <p class="font-medium">$19.99 USD</p>
+                                <p class="text-xs text-secondary">Expires in: <span id="qrExpiry" class="font-medium">5:00</span> minutes</p>
+                            </div>
+                            
+                            <button id="refreshQrBtn" class="mt-6 px-6 py-2 bg-primary/10 hover:bg-primary/20 text-primary font-medium rounded-lg transition-custom">
+                                <i class="fa fa-refresh mr-2"></i> Refresh QR Code
+                            </button>
+                            
+                            <!-- Manual Payment Confirmation -->
+                            <div class="mt-8 w-full">
+                                <p class="text-sm text-secondary mb-3">Already made payment?</p>
+                                <button id="confirmPaymentBtn" class="w-full bg-success hover:bg-success/90 text-white font-medium py-2 px-4 rounded-lg transition-custom text-sm">
+                                    <i class="fa fa-check mr-2"></i> Confirm Payment
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-12">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-3 gap-8">
+                <div>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <i class="fa fa-book text-primary text-2xl"></i>
+                        <span class="text-xl font-bold">Chinese Vocab Master</span>
+                    </div>
+                    <p class="text-gray-400 mb-4">AI-generated Chinese vocabulary flashcards for effective learning</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition-custom"><i class="fa fa-facebook"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-custom"><i class="fa fa-twitter"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-custom"><i class="fa fa-instagram"></i></a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#features" class="text-gray-400 hover:text-white transition-custom">Features</a></li>
+                        <li><a href="#pricing" class="text-gray-400 hover:text-white transition-custom">Pricing</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-custom">FAQ</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-custom">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Contact Us</h3>
+                    <ul class="space-y-2">
+                        <li class="flex items-start">
+                            <i class="fa fa-envelope text-primary mt-1 mr-3"></i>
+                            <span class="text-gray-400">support@chinesevocabmaster.com</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa fa-clock-o text-primary mt-1 mr-3"></i>
+                            <span class="text-gray-400">Mon-Fri: 9am - 5pm EST</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400 text-sm">
+                <p>© 2025 Chinese Vocab Master. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // DOM Elements
+        const loginModal = document.getElementById('loginModal');
+        const modalContent = document.getElementById('modalContent');
+        const loginForm = document.getElementById('loginForm');
+        const emailInput = document.getElementById('email');
+        const emailError = document.getElementById('emailError');
+        const loginBtn = document.getElementById('loginBtn');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const getStartedBtn = document.getElementById('getStartedBtn');
+        const purchaseBtn = document.getElementById('purchaseBtn');
+        const paymentPage = document.getElementById('paymentPage');
+        const closePaymentBtn = document.getElementById('closePaymentBtn');
+        const userEmailDisplay = document.getElementById('userEmailDisplay');
+        const confirmPaymentBtn = document.getElementById('confirmPaymentBtn');
+        const paymentStatus = document.getElementById('paymentStatus');
+        const invitationStatus = document.getElementById('invitationStatus');
+        const qrExpiry = document.getElementById('qrExpiry');
+        
+        // Email Validation Regex
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        
+        // Modal Animation Functions
+        function openModal() {
+            loginModal.classList.remove('hidden');
+            setTimeout(() => {
+                modalContent.classList.remove('scale-95', 'opacity-0');
+                modalContent.classList.add('scale-100', 'opacity-100');
+            }, 10);
+        }
+        
+        function closeModal() {
+            modalContent.classList.remove('scale-100', 'opacity-100');
+            modalContent.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => {
+                loginModal.classList.add('hidden');
+            }, 300);
+        }
+        
+        // QR Code Expiry Timer
+        function startQrTimer() {
+            let minutes = 5;
+            let seconds = 0;
+            
+            const timerInterval = setInterval(() => {
+                if (seconds === 0) {
+                    minutes--;
+                    seconds = 59;
+                } else {
+                    seconds--;
+                }
+                
+                qrExpiry.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+                
+                if (minutes === 0 && seconds === 0) {
+                    clearInterval(timerInterval);
+                    // Refresh QR code when expired
+                    refreshQrCode();
+                    startQrTimer();
+                }
+            }, 1000);
+        }
+        
+        // Refresh QR Code
+        function refreshQrCode() {
+            const randomSize = 200 + Math.floor(Math.random() * 50);
+            document.getElementById('paymentQrCode').src = `https://picsum.photos/${randomSize}/${randomSize}`;
+            alert('QR code refreshed! Please use the new QR code for payment.');
+        }
+        
+        // Simulate Quizlet Invitation (Replace with actual API call)
+        async function sendQuizletInvitation(email) {
+            try {
+                // In production, replace this with actual Quizlet API call
+                console.log(`Sending Quizlet invitation to: ${email}`);
+                
+                // Simulate API delay
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                
+                // Show success message
+                invitationStatus.classList.remove('hidden');
+                
+                // Log to backend (replace with actual API call to save email)
+                await logPaymentToBackend(email);
+                
+                return true;
+            } catch (error) {
+                console.error('Quizlet invitation failed:', error);
+                alert('Failed to send Quizlet invitation. Please contact support.');
+                return false;
+            }
+        }
+        
+        // Log Payment to Backend (Replace with actual API call)
+        async function logPaymentToBackend(email) {
+            try {
+                // In production, send POST request to your backend
+                const response = await fetch('/api/log-payment', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        amount: 19.99,
+                        paymentMethod: 'QR Code',
+                        timestamp: new Date().toISOString()
+                    })
+                });
+                
+                if (!response.ok) throw new Error('Failed to log payment');
+                return await response.json();
+            } catch (error) {
+                console.error('Payment logging failed:', error);
+                // Even if logging fails, don't block the user experience
+                return null;
+            }
+        }
+        
+        // Event Listeners
+        loginBtn.addEventListener('click', openModal);
+        getStartedBtn.addEventListener('click', openModal);
+        closeModalBtn.addEventListener('click', closeModal);
+        
+        // Close modal when clicking outside
+        loginModal.addEventListener('click', (e) => {
+            if (e.target === loginModal) closeModal();
+        });
+        
+        // Email Validation
+        emailInput.addEventListener('input', () => {
+            if (emailInput.value && !emailRegex.test(emailInput.value)) {
+                emailError.classList.remove('hidden');
+            } else {
+                emailError.classList.add('hidden');
+            }
+        });
+        
+        // Login Form Submission
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            // Validate Email
+            if (!emailRegex.test(emailInput.value)) {
+                emailError.classList.remove('hidden');
+                return;
+            }
+            
+            // Get User Email
+            const userEmail = emailInput.value;
+            
+            // Save to Local Storage (for persistence)
+            localStorage.setItem('loggedIn', 'true');
+            localStorage.setItem('userEmail', userEmail);
+            
+            // Update UI
+            closeModal();
+            loginBtn.classList.add('hidden');
+            logoutBtn.classList.remove('hidden');
+            userEmailDisplay.textContent = userEmail;
+            
+            // Show Success Message
+            alert(`Welcome! You've been logged in as ${userEmail}`);
+        });
+        
+        // Logout Functionality
+        logoutBtn.addEventListener('click', () => {
+            // Clear Local Storage
+            localStorage.removeItem('loggedIn');
+            localStorage.removeItem('userEmail');
+            
+            // Update UI
+            logoutBtn.classList.add('hidden');
+            loginBtn.classList.remove('hidden');
+            
+            // Show Success Message
+            alert('You have been logged out successfully.');
+        });
+        
+        // Purchase Button Click (Requires Login)
+        purchaseBtn.addEventListener('click', () => {
+            const isLoggedIn = localStorage.getItem('loggedIn') === 'true';
+            const userEmail = localStorage.getItem('userEmail');
+            
+            if (isLoggedIn && userEmail) {
+                // User is logged in - open payment page
+                paymentPage.classList.remove('hidden');
+                userEmailDisplay.textContent = userEmail;
+                startQrTimer();
+            } else {
+                // User not logged in - open login modal first
+                openModal();
+                alert('Please login first to complete your purchase');
+            }
+        });
+        
+        // Close Payment Page
+        closePaymentBtn.addEventListener('click', () => {
+            paymentPage.classList.add('hidden');
+            // Reset payment status
+            paymentStatus.classList.add('hidden');
+            invitationStatus.classList.add('hidden');
+        });
+        
+        // Refresh QR Code Button
+        document.getElementById('refreshQrBtn').addEventListener('click', refreshQrCode);
+        
+        // Confirm Payment Button
+        confirmPaymentBtn.addEventListener('click', async () => {
+            const userEmail = localStorage.getItem('userEmail');
+            
+            if (!userEmail) {
+                alert('Please login first');
+                return;
+            }
+            
+            // Show payment confirmation
+            paymentStatus.classList.remove('hidden');
+            
+            // Simulate payment verification delay
+            await new Promise(resolve => setTimeout(resolve, 3000));
+            
+            // Send Quizlet invitation
+            await sendQuizletInvitation(userEmail);
+        });
+        
+        // Check Login Status on Page Load
+        window.addEventListener('DOMContentLoaded', () => {
+            const isLoggedIn = localStorage.getItem('loggedIn') === 'true';
+            const userEmail = localStorage.getItem('userEmail');
+            
+            if (isLoggedIn && userEmail) {
+                loginBtn.classList.add('hidden');
+                logoutBtn.classList.remove('hidden');
+                userEmailDisplay.textContent = userEmail;
+            }
+        });
+        
+        // Create Account Button (Placeholder)
+        document.getElementById('createAccountBtn').addEventListener('click', () => {
+            alert('Account creation is handled via email verification. Please use your email to login - a new account will be created automatically.');
+        });
+    </script>
+</body>
+</html>
